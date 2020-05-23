@@ -1,0 +1,18 @@
+Clone the project 
+	git clone url
+
+Configure details  
+	git config --global user.email "you@example.com"
+  	git config --global user.name "Your Name"
+
+Add files
+	git add *
+
+Commit with message
+	git commit -m "Message"
+
+Push
+	git push origin master
+
+Update
+	git pull
