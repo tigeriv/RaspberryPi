@@ -25,6 +25,10 @@ def get_mask(input_image, interpreter, input_details, output_details):
     return cat_image
 
 
+def center_of_mass(mask):
+    return np.average(np.argwhere(mask), axis=0)
+
+
 if __name__ == "__main__":
     camera, output = init_camera()
     frame = np.asarray([get_image(camera, output)])
@@ -33,3 +37,4 @@ if __name__ == "__main__":
     road_image = cat_to_im(mask)
     save_image("OG.jpg", frame[0])
     save_image("Mask.jpg", road_image)
+    print(center_of_mass(mask))

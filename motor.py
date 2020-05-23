@@ -6,6 +6,8 @@
 # IN1 runs motor backwards, IN2 forwards
 # 0 is Right, 1 is Left
 
+# Note, you need to install wiring pi with pip3 install wiringpi
+
 
 import RPi.GPIO as GPIO
 import time
@@ -22,20 +24,25 @@ ENABLE = 0
 BACK = 1
 FORWARD = 2
 motors = [motorL, motorR]
+# This constant is used when calculating duty cycle
+# R is more powerful than L
+RPOWER = 0.87
 
     
 def forward():
+    wiringpi.softPwmWrite(motorL[ENABLE], 100)
+    wiringpi.softPwmWrite(motorR[ENABLE], 87)
     for motor in motors:
         # GPIO.output(motor[ENABLE], True)
-        wiringpi.softPwmWrite(motor[ENABLE], 100)
         GPIO.output(motor[FORWARD], True)
         GPIO.output(motor[BACK], False)
       
       
 def backward():
+    wiringpi.softPwmWrite(motorL[ENABLE], 100)
+    wiringpi.softPwmWrite(motorR[ENABLE], 87)
     for motor in motors:
         # GPIO.output(motor[ENABLE], True)
-        wiringpi.softPwmWrite(motor[ENABLE], 50)
         GPIO.output(motor[FORWARD], False)
         GPIO.output(motor[BACK], True)
 
@@ -60,8 +67,8 @@ def init_motors():
 init_motors()
 
 forward()
-time.sleep(1)
+time.sleep(2)
 stop()
 backward()
-time.sleep(1)
+time.sleep(2)
 stop()
