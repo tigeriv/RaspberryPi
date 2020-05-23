@@ -30,4 +30,6 @@ if __name__ == "__main__":
     frame = np.asarray([get_image(camera, output)])
     interpreter, input_details, output_details = init_model()
     mask = get_mask(frame, interpreter, input_details, output_details)
-    
+    road_image = cat_to_im(mask)
+    save_image("OG.jpg", frame[0])
+    save_image("Mask.jpg", road_image)
