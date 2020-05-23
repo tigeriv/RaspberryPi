@@ -9,9 +9,12 @@
 
 import RPi.GPIO as GPIO
 import time
+import wiringpi
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
+
+OUTPUT = 1
 
 motorR = [17, 27, 22]
 motorL = [25, 23, 24]
@@ -20,30 +23,45 @@ BACK = 1
 FORWARD = 2
 motors = [motorL, motorR]
 
-for pin in motorL + motorR:
-    GPIO.setup(pin, GPIO.OUT)
     
 def forward():
     for motor in motors:
-        GPIO.output(motor[ENABLE], True)
+        # GPIO.output(motor[ENABLE], True)
+        wiringpi.softPwmWrite(motor[ENABLE], 100)
         GPIO.output(motor[FORWARD], True)
         GPIO.output(motor[BACK], False)
-        
+      
+      
 def backward():
     for motor in motors:
-        GPIO.output(motor[ENABLE], True)
+        # GPIO.output(motor[ENABLE], True)
+        wiringpi.softPwmWrite(motor[ENABLE], 50)
         GPIO.output(motor[FORWARD], False)
         GPIO.output(motor[BACK], True)
 
 def stop():
     for motor in motors:
-        GPIO.output(motor[ENABLE], False)
+        # GPIO.output(motor[ENABLE], False)
+        wiringpi.softPwmWrite(motor[ENABLE], 0)
         GPIO.output(motor[FORWARD], False)
         GPIO.output(motor[BACK], False)
+    
 
-backward()
-time.sleep(5)
-stop()
+def init_motors():
+    for pin in motorL + motorR:
+        GPIO.setup(pin, GPIO.OUT)
+    wiringpi.wiringPiSetupGpio()
+    wiringpi.pinMode(motorL[ENABLE], OUTPUT)
+    wiringpi.pinMode(motorR[ENABLE], OUTPUT)
+    wiringpi.softPwmCreate(motorL[ENABLE], 0, 100)
+    wiringpi.softPwmCreate(motorR[ENABLE], 0, 100)
+        
+    
+init_motors()
+
 forward()
-time.sleep(5)
+time.sleep(1)
+stop()
+backward()
+time.sleep(1)
 stop()
