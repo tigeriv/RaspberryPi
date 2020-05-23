@@ -18,6 +18,7 @@ def init_camera():
 
 
 def get_image(camera, output):
+    output.truncate(0)
     camera.capture(output, 'rgb')
     return output.array
 

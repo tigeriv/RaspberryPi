@@ -62,13 +62,45 @@ def init_motors():
     wiringpi.pinMode(motorR[ENABLE], OUTPUT)
     wiringpi.softPwmCreate(motorL[ENABLE], 0, 100)
     wiringpi.softPwmCreate(motorR[ENABLE], 0, 100)
-        
     
-init_motors()
+    
+# A 2-item tuple. 1st is the center of mass row, 2nd is column
+# Closer to 0 for row = faster, further from center = sharper steering
+# Res is image resolution
+def com_to_loss(com, res):
+    distance = (res[0] - com[0]) / res[0]
+    angle = (com[1] - res[1]/2) / res[1]
+    return (distance, angle)
 
-forward()
-time.sleep(2)
-stop()
-backward()
-time.sleep(2)
-stop()
+
+def move_motor(motor, power):
+    wiringpi.softPwmWrite(motor[ENABLE], power)
+    GPIO.output(motor[FORWARD], True)
+    GPIO.output(motor[BACK], False)
+
+
+# L is negative, R is positive
+def steer(power, angle):
+    print(power, angle)
+    RPower = 100 * power * RPOWER
+    LPower = 100 * power
+    # Greater than 0: decrease L
+    if angle > 0:
+        LPower *= abs(1 - angle)
+    # Less than 0: decrease R
+    else:
+        RPower *= abs(1 - angle)
+    print(LPower, RPower)
+    move_motor(motorL, int(LPower))
+    move_motor(motorR, int(RPower))
+    
+    
+if __name__ == "__main__":
+    init_motors()
+
+    forward()
+    time.sleep(2)
+    stop()
+    backward()
+    time.sleep(2)
+    stop()
