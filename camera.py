@@ -1,16 +1,23 @@
 from picamera import PiCamera
+from picamera import array
 from time import sleep
 
-camera = PiCamera()
-camera.rotation = 0
-# Max res for camera (2592, 1944)
-camera.resolution = (240, 240)
-camera.framerate = 15
+res = (240, 240)
 
-camera.start_preview()
-# camera.start_recording('/home/pi/Desktop/video.h264')
-for i in range(60):
-    sleep(1)
-    camera.capture('/home/pi/Desktop/image%s.jpg' % i)
-# camera.stop_recording()
-camera.stop_preview()
+def init_camera():
+    camera = PiCamera()
+    output = array.PiRGBArray(camera)
+    camera.rotation = 0
+    # Max res for camera (2592, 1944)
+    camera.resolution = res
+    return camera, output
+
+def get_image(camera, output):
+    camera.capture(output, 'rgb')
+    return output.array
+    
+
+if __name__ == "__main__":
+    camera, output = init_camera()
+    frame = get_image(camera, output)
+    print(frame.shape)
