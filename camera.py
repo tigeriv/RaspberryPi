@@ -13,6 +13,7 @@ def init_camera():
     camera.rotation = 0
     # Max res for camera (2592, 1944)
     camera.resolution = res
+    sleep(5)
     return camera, output
 
 
