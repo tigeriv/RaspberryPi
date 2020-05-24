@@ -65,12 +65,12 @@ def init_motors():
     
     
 # A 2-item tuple. 1st is the center of mass row, 2nd is column
-# Closer to 0 for row = faster, further from center = sharper steering
-# Res is image resolution
+# Returns values in range -0.5 to 0.5, where 0 is optimal
+# Higher means faster for distance, positive angle is right (so steer to the left)
 def com_to_loss(com, res):
-    distance = (res[0] - com[0]) / res[0]
+    distance = (res[0]/2 - com[0]) / res[0]
     angle = (com[1] - res[1]/2) / res[1]
-    return (distance, angle)
+    return distance, angle
 
 
 def move_motor(motor, power):
@@ -84,13 +84,14 @@ def steer(power, angle):
     print(power, angle)
     RPower = 100 * power * RPOWER
     LPower = 100 * power
-    # Greater than 0: decrease L
+
+    # Greater than 0: decrease R
     if angle > 0:
-        LPower *= abs(1 - angle)
-    # Less than 0: decrease R
-    else:
         RPower *= abs(1 - angle)
-    print(LPower, RPower)
+    # Less than 0: decrease L
+    else:
+        LPower *= abs(1 - angle)
+
     move_motor(motorL, int(LPower))
     move_motor(motorR, int(RPower))
     

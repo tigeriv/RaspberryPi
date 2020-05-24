@@ -3,8 +3,9 @@ from RunLite import *
 from motor import *
 from camera import *
 import math
+import time
 
-KP = 10
+KP = 1
 
 
 if __name__ == "__main__":
@@ -18,8 +19,9 @@ if __name__ == "__main__":
         com = center_of_mass(mask)
         if com is None:
             continue
-        print(com)
         power, angle = com_to_loss(com, (240, 240))
-        power = math.atan(power * KP) / (math.pi / 2)
+
+        # atan returns a number, -pi/2 to pi/2
+        power = 0.75 + 0.25 * math.atan(power * KP) / (math.pi / 2)
         steer(power, angle)
         
