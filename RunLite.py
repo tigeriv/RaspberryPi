@@ -2,6 +2,7 @@ import numpy as np
 import time
 import tflite_runtime.interpreter as tflite
 from camera import *
+from motor import *
 
 
 def init_model():
@@ -40,4 +41,8 @@ if __name__ == "__main__":
     road_image = cat_to_im(mask)
     save_image("OG.jpg", frame[0])
     save_image("Mask.jpg", road_image)
-    print(center_of_mass(mask))
+    
+    com = center_of_mass(mask)
+    power, angle = com_to_loss(com, (240, 240))
+    print(power, angle, com)
+    

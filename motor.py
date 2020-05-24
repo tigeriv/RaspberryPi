@@ -69,7 +69,7 @@ def init_motors():
 # Higher means faster for distance, positive angle is right (so steer to the left)
 def com_to_loss(com, res):
     distance = (res[0]/2 - com[0]) / res[0]
-    angle = (com[1] - res[1]/2) / res[1]
+    angle = 2 * (com[1] - res[1]/2) / res[1]
     return distance, angle
 
 
@@ -81,7 +81,6 @@ def move_motor(motor, power):
 
 # L is negative, R is positive
 def steer(power, angle):
-    print(power, angle)
     RPower = 100 * power * RPOWER
     LPower = 100 * power
 
@@ -90,7 +89,7 @@ def steer(power, angle):
         RPower *= abs(1 - angle)
     # Less than 0: decrease L
     else:
-        LPower *= abs(1 - angle)
+        LPower *= (1 - abs(angle))
 
     move_motor(motorL, int(LPower))
     move_motor(motorR, int(RPower))
@@ -98,10 +97,14 @@ def steer(power, angle):
     
 if __name__ == "__main__":
     init_motors()
-
-    forward()
-    time.sleep(2)
-    stop()
-    backward()
-    time.sleep(2)
-    stop()
+    steer(1, 0)
+    time.sleep(1)
+    steer(0, 0)
+    time.sleep(1)
+    steer(1, 1)
+    time.sleep(1)
+    steer(0, 0)
+    time.sleep(1)
+    steer(1, -1)
+    time.sleep(1)
+    steer(0, 0)
