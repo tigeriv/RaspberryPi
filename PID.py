@@ -6,12 +6,12 @@ import math
 import time
 
 KP = 1
-KI = 0.2
-KD = 0
+KI = 1
+KD = 0.5
 last_ten = [[0.0, 0.0]] * 10
 ten_sum = np.sum(np.asarray(last_ten), axis=0)
-MID_POWER = 0.72
-MAX_ANGLE = 0.4
+MID_POWER = 0.8
+MAX_ANGLE = 0.5
 
 
 def calculate_integral(new_term):
@@ -54,11 +54,15 @@ if __name__ == "__main__":
         
         if angle < -MAX_ANGLE:
             angle =  -MAX_ANGLE
-            power = MID_POWER + 0.15
+            power = MID_POWER
         if angle > MAX_ANGLE:
             angle = MAX_ANGLE
-            power = MID_POWER + 0.15
+            power = MID_POWER
             
         print(power, angle)
         steer(power, angle)
+        
+        time.sleep(0.5)
+        steer(0, 0)
+        
         
