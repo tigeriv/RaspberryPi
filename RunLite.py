@@ -28,7 +28,7 @@ def get_mask(input_image, interpreter, input_details, output_details):
 
 def center_of_mass(mask):
     points = np.argwhere(mask)
-    if len(points) == 0:
+    if len(points) < 50:
         return None
     return np.average(points, axis=0)
 

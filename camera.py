@@ -37,7 +37,16 @@ def save_image(path, img):
     imageio.imwrite(path, img)
     
 
+def get_train_images(camera, output):
+    for i in range(200, 260):
+        print(i)
+        sleep(1)
+        frame = get_image(camera, output)
+        save_image(str("TrainingImages/" + str(i) + ".jpg"), frame)
+
+
+
 if __name__ == "__main__":
     camera, output = init_camera()
+    get_train_images(camera, output)
     frame = get_image(camera, output)
-    print(frame.shape)

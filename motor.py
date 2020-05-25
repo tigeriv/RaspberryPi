@@ -81,6 +81,10 @@ def move_motor(motor, power):
 
 # L is negative, R is positive
 def steer(power, angle):
+    power *= 1/(1 - angle/10)
+    if power > 100:
+        power = 100
+        
     RPower = 100 * power * RPOWER
     LPower = 100 * power
 
