@@ -38,7 +38,7 @@ def save_image(path, img):
     
 
 def get_train_images(camera, output):
-    for i in range(200, 260):
+    for i in range(200, 300):
         print(i)
         sleep(1)
         frame = get_image(camera, output)

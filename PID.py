@@ -6,8 +6,8 @@ import math
 import time
 
 KP = 1
-KI = 1
-KD = 0.5
+KI = 0
+KD = 0
 last_ten = [[0.0, 0.0]] * 10
 ten_sum = np.sum(np.asarray(last_ten), axis=0)
 MID_POWER = 0.8
